@@ -1,0 +1,34 @@
+group 'com.conway'
+version '1.0.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Game of Life',
+          'Implementation-Version': version,
+          'Main-Class': 'com.conway.gameoflife.GameOfLife'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.conway.gameoflife.GameOfLife'
+    }
+}
+
+dependencies {
+    compile group: 'com.typesafe',  name: 'config',       version: '1.3.1'
+    compile group: 'org.slf4j',     name: 'slf4j-simple', version: '1.7.6'
+
+    testCompile group: 'junit',        name: 'junit',  version: '4.12'
+}
